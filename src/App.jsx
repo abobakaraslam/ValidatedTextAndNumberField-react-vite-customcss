@@ -19,13 +19,11 @@ function App() {
     event.preventDefault(); //avoid page loading when form is submitted
 
     //validating text field
-    let userName_get = InputData.userName;
-    userName_get = sanitizeInput(userName_get);//sanitizing now
+    let userName_get = sanitizeInput(InputData.userName);//sanitizing now
     console.log("Name entered by User: ", userName_get);
 
     //validating number field
-    let userAge_get = InputData.userAge;
-    userAge_get = sanitizeInput(userAge_get);//sanitizing now
+    let userAge_get = sanitizeInput(InputData.userAge);//sanitizing now
     console.log("Age entered by User: ", userAge_get);
   }
    
