@@ -1,36 +1,78 @@
 /*File: App.jsx located in RootFolder/src/      */
 import { useState } from "react";
 import { sanitizeInput } from "./utils/sanitizeInput";
- 
+
 function App() {
+  //States for errors
+  const [errorOverallState, setErrorOverallState] = useState("");
+  const [errortxtField1State, setErrortxtField1State] = useState("");
+  const [errornumField1State, setErrornumField1State] = useState("");
 
   //initialize states for all input fields
   const [InputData, setInputData] = useState({
-    userName: "",
-    userAge: 0
+    txtField1: "",
+    numField1: 0
   });
   //function to update values of states when user types
   const onChangeInputData = (event) => {
     setInputData({ ...InputData, [event.target.name]: event.target.value });
   };
- 
+
   //When form is submitted
   const handleForm = (event)=>{
     event.preventDefault(); //avoid page loading when form is submitted
+    console.log("button submitted")
 
-    //validating text field
-    let userName_get = sanitizeInput(InputData.userName);//sanitizing now
-    console.log("Name entered by User: ", userName_get);
+    // Reset previous errors
+    setErrorOverallState("");
+    setErrortxtField1State("");
+    setErrornumField1State("");
 
-    //validating number field
-    let userAge_get = sanitizeInput(InputData.userAge);//sanitizing now
-    console.log("Age entered by User: ", userAge_get);
+    let errorOverall = 1; // assume no errors initially
+    
+    //Validating txtField1
+    let txtField1_get = sanitizeInput(InputData.txtField1);//sanitization
+    if (txtField1_get === "") {
+      setErrortxtField1State("Please enter in textField1");
+      errorOverall = 0;
+    }
+
+    //validing numField1
+    let numField1_get = sanitizeInput(InputData.numField1);//sanitization
+    if (numField1_get === "") {
+      setErrornumField1State("Please enter in numField1");
+      errorOverall = 0;
+    }
+
+    //Stop execution if errors exist
+    if (errorOverall === 0) {
+      setErrorOverallState("Please enter all data in correct format");
+      return;// stops the function here
+    }
+    console.log("txtField1: ",txtField1_get);
+    console.log("numField1: ",numField1_get);
   }
-   
+  
   return <div>
+    {errorOverallState && (
+      <p style={{color: "red"}}>{errorOverallState}</p>
+    )}
+
     <form onSubmit={handleForm}>
-      <input type="text" name="userName" id="userName" value={InputData.userName} onChange={onChangeInputData} placeholder="Name here" />
-      <input type="number" name="userAge" id="userAge" value={InputData.userAge} onChange={onChangeInputData} placeholder="0" />
+
+      {errortxtField1State && (
+        <p style={{color: "red"}}>{errortxtField1State}</p>
+      )}
+      <input type="text" name="txtField1" id="txtField1" value={InputData.regEmail} onChange={onChangeInputData} placeholder="Type txtField1 data here" />
+      <br />
+      
+      {errornumField1State && (
+        <p style={{color: "red"}}>{errornumField1State}</p>
+      )}
+      <input type="number" name="numField1" id="numField1" value={InputData.numField1} onChange={onChangeInputData} placeholder="Type numField1 data here" />
+
+      <br />
+
       <button type="submit">Submit</button>
     </form>
   </div>
